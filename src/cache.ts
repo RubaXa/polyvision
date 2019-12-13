@@ -8,9 +8,10 @@ export function createRuntimeCache(): Cache {
 	const cache = {} as {[key:string]: object};
 
 	return {
-		get: async (key: string) => cache[key],
-		set: async (key: string, value: object) => {
+		get: (key: string) => Promise.resolve(cache[key]),
+		set: (key: string, value: object) => {
 			cache[key] = value;
+			return Promise.resolve(undefined);
 		},
 	};
 };

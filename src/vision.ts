@@ -23,9 +23,9 @@ export type Rect = {
 	y2: number;
 };
 
-export async function recognize(client: PolyVision, file: Buffer): Promise<Phrases>;
-export async function recognize(client: PolyVision, key: string, file: Buffer): Promise<Phrases>;
-export async function recognize(client: PolyVision, keyOrBuffer: string | Buffer, file?: Buffer): Promise<Phrases> {
+export function recognize(client: PolyVision, file: Buffer): Promise<Phrases>;
+export function recognize(client: PolyVision, key: string, file: Buffer): Promise<Phrases>;
+export function recognize(client: PolyVision, keyOrBuffer: string | Buffer, file?: Buffer): Promise<Phrases> {
 	if (imageAnnotatorClient === null) {
 		imageAnnotatorClient = new ImageAnnotatorClient();
 	}

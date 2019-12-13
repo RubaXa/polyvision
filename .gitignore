@@ -67,3 +67,4 @@ typings/
 dist
 compiled
 public
+google.credentials.json

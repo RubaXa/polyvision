@@ -14,9 +14,9 @@ export type TranslatedPhrases = Array<{
 
 let translationClient: any = null;
 
-export async function translate(client: PolyVision, phrases: Phrases): Promise<TranslatedPhrases>;
-export async function translate(client: PolyVision, key: string, phrases: Phrases): Promise<TranslatedPhrases>;
-export async function translate(
+export function translate(client: PolyVision, phrases: Phrases): Promise<TranslatedPhrases>;
+export function translate(client: PolyVision, key: string, phrases: Phrases): Promise<TranslatedPhrases>;
+export function translate(
 	client: PolyVision,
 	keyOrPhrases: string | Phrases,
 	phrases?: Phrases,

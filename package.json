@@ -4,7 +4,7 @@
   "description": "To be simple, the package for text recognition and translation.",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node ./tests/all.tests.ts",
+    "test": "GOOGLE_APPLICATION_CREDENTIALS=./google.credentials.json ts-node ./tests/all.tests.ts",
     "build": "tsc",
     "prepublishOnly": "npm test && npm run build"
   },

@@ -25,7 +25,7 @@ function translateTest(phrases: Phrases) {
 }
 
 Promise
-	.resolve('~/Downloads/item-4.jpg')
+	.resolve('/Users/k.lebedev/Downloads/item-4.jpg')
 	.then(recognizeTest)
 	.then(translateTest)
 	.then((phrases) => {
