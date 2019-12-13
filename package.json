@@ -4,7 +4,9 @@
   "description": "To be simple, the package for text recognition and translation.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-node ./tests/all.tests.ts",
+    "build": "tsc",
+    "prepublishOnly": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -14,7 +16,7 @@
     "google",
     "vision",
     "text",
-    "recognition",
+    "recognize",
     "translate"
   ],
   "author": "RubaXa <ibn@rubaxa.org>",
@@ -22,5 +24,13 @@
   "bugs": {
     "url": "https://github.com/RubaXa/polyvision/issues"
   },
-  "homepage": "https://github.com/RubaXa/polyvision#readme"
+  "homepage": "https://github.com/RubaXa/polyvision#readme",
+  "dependencies": {
+    "@google-cloud/translate": "^5.1.2",
+    "@google-cloud/vision": "^1.7.2"
+  },
+  "devDependencies": {
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
 }
