@@ -1,0 +1,26 @@
+{
+  "name": "polyvision",
+  "version": "0.1.0",
+  "description": "To be simple, the package for text recognition and translation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/RubaXa/polyvision.git"
+  },
+  "keywords": [
+    "google",
+    "vision",
+    "text",
+    "recognition",
+    "translate"
+  ],
+  "author": "RubaXa <ibn@rubaxa.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RubaXa/polyvision/issues"
+  },
+  "homepage": "https://github.com/RubaXa/polyvision#readme"
+}
