@@ -63,8 +63,9 @@ typings/
 # NMPy
 .npmyrc
 
-# Distributive
+# Project
 dist
 compiled
 public
 google.credentials.json
+tests/*.json

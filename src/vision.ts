@@ -24,8 +24,12 @@ export type Rect = {
 };
 
 export function recognize(client: PolyVision, file: Buffer): Promise<Phrases>;
-export function recognize(client: PolyVision, key: string, file: Buffer): Promise<Phrases>;
-export function recognize(client: PolyVision, keyOrBuffer: string | Buffer, file?: Buffer): Promise<Phrases> {
+export function recognize(client: PolyVision, key: string | undefined, file: Buffer): Promise<Phrases>;
+export function recognize(
+	client: PolyVision,
+	keyOrBuffer: string | Buffer | undefined,
+	file?: Buffer,
+): Promise<Phrases> {
 	if (imageAnnotatorClient === null) {
 		imageAnnotatorClient = new ImageAnnotatorClient();
 	}
@@ -34,6 +38,10 @@ export function recognize(client: PolyVision, keyOrBuffer: string | Buffer, file
 	const key = keyOrBuffer instanceof Buffer ? undefined : keyOrBuffer;
 	const blob = keyOrBuffer instanceof Buffer ? keyOrBuffer : file!;
 
+	if (!(file instanceof Buffer)) {
+		throw new Error('file is not Buffer');
+	}
+
 	return Promise.resolve()
 		.then(() => key === undefined ? undefined : cache.get(`vision:${key}`))
 		.then((cachedValue) => {
@@ -41,15 +49,17 @@ export function recognize(client: PolyVision, keyOrBuffer: string | Buffer, file
 				return cachedValue;
 			}
 
-			return imageAnnotatorClient.textDetection(blob);
+			return imageAnnotatorClient
+				.textDetection(blob)
+				.then(([result]) => result)
+				.then((result) => {
+					const detections = result.textAnnotations;
+					const phrases = detections.slice(1).reduce(reducePhrases, []);
+					return phrases;
+				})
+				.then((phrases) => key === undefined ? phrases : cache.set(`vision:${key}`, phrases))
+			;
 		})
-		.then(([result]) => result)
-		.then((result) => {
-			const detections = result.textAnnotations;
-			const phrases = detections.slice(1).reduce(reducePhrases, []);
-			return phrases;
-		})
-		.then((phrases) => key === undefined ? phrases : cache.set(`vision:${key}`, phrases))
 	;
 }
 

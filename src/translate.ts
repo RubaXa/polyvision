@@ -15,10 +15,10 @@ export type TranslatedPhrases = Array<{
 let translationClient: any = null;
 
 export function translate(client: PolyVision, phrases: Phrases): Promise<TranslatedPhrases>;
-export function translate(client: PolyVision, key: string, phrases: Phrases): Promise<TranslatedPhrases>;
+export function translate(client: PolyVision, key: string | undefined, phrases: Phrases): Promise<TranslatedPhrases>;
 export function translate(
 	client: PolyVision,
-	keyOrPhrases: string | Phrases,
+	keyOrPhrases: string | Phrases | undefined,
 	phrases?: Phrases,
 ): Promise<TranslatedPhrases> {
 	if (translationClient === null) {
@@ -33,8 +33,12 @@ export function translate(
 		projectId,
 		location,
 	} = getTranslateOptions();
-	const key = phrases === undefined ? undefined : keyOrPhrases;
+	const key = (phrases === undefined ? undefined : keyOrPhrases) as (string | undefined);
 	const values = phrases === undefined ? keyOrPhrases as Phrases : phrases;
+
+	if (!Array.isArray(values)) {
+		throw new Error('phrases is undefined');
+	}
 
 	const request = {
 		parent: `projects/${projectId}/locations/${location}`,
@@ -49,19 +53,25 @@ export function translate(
 	}
 
 	return Promise.resolve()
-		.then(() => key === undefined ? undefined : cache.get(`tr:${key}`))
+		.then(() => key === undefined ? undefined : cache.get(`translate:${key}`))
 		.then(cachedValue => {
 			if (cachedValue !== undefined) {
 				return cachedValue;
 			}
 
-			return translationClient.translateText(request);
+			return translationClient
+				.translateText(request)
+				.then(([{translations}]) => translations)
+				.then(translations => {
+					const result = translations.map(({translatedText}, i: number) => ({
+						...values[i],
+						translatedValue: translatedText,
+					}));
+
+					return key === undefined ? result : cache.set(`translate:${key}`, result);
+				})
+			;
 		})
-		.then(([{translations}]) => translations)
-		.then(translations => translations.map(({translatedText}, i: number) => ({
-			...values[i],
-			translatedValue: translatedText,
-		})))
 	;
 }
 
